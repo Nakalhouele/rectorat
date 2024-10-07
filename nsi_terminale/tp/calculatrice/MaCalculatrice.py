@@ -5,119 +5,131 @@
 # TODO: //ajouter une memoire pour remonter dans l'historique en utilisant une liste
 
 
-class Addition():
-    
+class Addition:
+
     def __init__(self) -> None:
-        pass
-    
-    def calcule(self, a, b):
-        return a + b
-    
-    def recuperer_saisie(self) -> tuple[int, int]: 
-        print("Vous souhaitez faire une Addition")
+        self.nom = "Addition"
+
+    def calcule(self, memoire):
+        a, b = self.recuperer_saisie()
+        c = a + b
+        memoire.append(f"{a} + {b} = {c}")
+        return c
+
+    def recuperer_saisie(self) -> tuple[int, int]:
+        print(f"Vous souhaitez faire une {self.nom}")
         a = int(input("Saisir le premier nombre : "))
         b = int(input("Saisir le deuxieme nombre : "))
         return a, b
 
-class Soustraction():
-    
+
+class Soustraction:
+
     def __init__(self) -> None:
-        pass
-    
-    def calcule(self, a, b):
-        return a - b
-    
-class Multiplication():
-    
+        self.nom = "Soustraction"
+
+    def calcule(self, memoire):
+        a, b = self.recuperer_saisie()
+        c = a - b
+        memoire.append(f"{a} - {b} = {c}")
+        return c
+
+    def recuperer_saisie(self) -> tuple[int, int]:
+        print(f"Vous souhaitez faire une {self.nom}")
+        a = int(input("Saisir le premier nombre : "))
+        b = int(input("Saisir le deuxieme nombre : "))
+        return a, b
+
+
+class Multiplication:
+
     def __init__(self) -> None:
-        pass
-    
-    def calcule(self, a, b):
-        return a * b 
+        self.nom = "Multiplication"
+
+    def calcule(self, memoire):
+        a, b = self.recuperer_saisie()
+        c = a * b
+        memoire.append(f"{a} * {b} = {c}")
+        return c
+
+    def recuperer_saisie(self) -> tuple[int, int]:
+        print(f"Vous souhaitez faire une {self.nom}")
+        a = int(input("Saisir le premier nombre : "))
+        b = int(input("Saisir le deuxieme nombre : "))
+        return a, b
 
 
-class Division():
-    
-    
+class Division:
+
     def __init__(self) -> None:
-        pass
-    
-    def calcule(self, a, b) -> int:
-        return a / b
+        self.nom = "Division"
+
+    def calcule(self, memoire) -> int:
+        a, b = self.recuperer_saisie()
+        c = a / b
+        memoire.append(f"{a} / {b} = {c}")
+        return c
+
+    def recuperer_saisie(self) -> tuple[int, int]:
+        print(f"Vous souhaitez faire une {self.nom}")
+        a = int(input("Saisir le premier nombre : "))
+        b = int(input("Saisir le deuxieme nombre : "))
+        return a, b
 
 
-class RacineCarre():
-    
+class RacineCarre:
+
     def __init__(self) -> None:
-        pass
-    
-    def calcule(self, nombre) -> int:
-        return nombre ** 0.5
+        self.nom = "RacineCarre"
+
+    def calcule(self, memoire) -> int:
+        nombre = self.recuperer_saisie()
+        c = nombre**0.5
+        memoire.append(f"racine carre {nombre} = {c}")
+        return c
+
+    def recuperer_saisie(self) -> int:
+        print(f"Vous souhaitez faire une {self.nom}")
+        a = int(input("Saisir le nombre : "))
+        return a
 
 
-class Calculatrice():
+class Calculatrice:
     memoire = []
-    
+
     def __init__(self, nom: str) -> None:
         self.nom = nom
-        print(f'Bienvenue sur {self.nom}')
-    
-    def eteindre(self): 
-        print(f'Votre historique: {len(self.memoire)} opérations')
-        self.memoire.reverse()
+        self.on_off = True
+        self.dictionnaire = {
+            "0": (Addition().calcule),
+            "1": (Soustraction().calcule),
+            "2": (Multiplication().calcule),
+            "3": (Division().calcule),
+            "4": (RacineCarre().calcule),
+            "-1": (self.eteindre),
+        }
+        print(f"Bienvenue sur {self.nom}")
+
+    def eteindre(self, memoire):
+        self.on_off = False
+        print(f"Votre historique: {len(memoire)} opérations")
+        memoire.reverse()
         for element in self.memoire:
             print(element)
-        print(f'A bientôt sur {self.nom}')
+        print(f"A bientôt sur {self.nom}")
 
     def enregistrer(self, operation: str) -> None:
-        self.memoire.append(operation) 
-        
-    def execute(self) -> None: 
-        addition = Addition()
-        soustraction = Soustraction()
-        multiplication = Multiplication()
-        division = Division()
-        racine_carre = RacineCarre()
+        self.memoire.append(operation)
 
-        on_off = True
-        while on_off:
+    def execute(self) -> None:
+        while self.on_off:
             volonte = input("Que veux tu faire : ")
-            if volonte == "0":
-                a, b = addition.recuperer_saisie()
-                resultat = addition.calcule(a, b)
-                print(resultat)
-                self.enregistrer(f'{a} + {b} = {resultat}')
-            elif volonte == "1":
-                print("Vous souhaitez faire une Soustraction")
-                a = int(input("Saisir le premier nombre : "))
-                b = int(input("Saisir le deuxieme nombre : "))
-                resultat = soustraction.calcule(a, b)
-                print(resultat)
-                self.enregistrer(f'{a} - {b} = {resultat}')
-            elif volonte == "2":
-                print("Vous souhaitez faire une Multiplication")
-                a = int(input("Saisir le premier nombre : "))
-                b = int(input("Saisir le deuxieme nombre : "))
-                resultat = multiplication.calcule(a, b)
-                print(resultat)
-                self.enregistrer(f'{a} * {b} = {resultat}')
-            elif volonte == "3":
-                print("Vous souhaitez faire une Division")
-                a = int(input("Saisir le premier nombre : "))
-                b = int(input("Saisir le deuxieme nombre : "))
-                resultat = division.calcule(a, b)
-                print(resultat)
-                self.enregistrer(f'{a} - {b} = {resultat}')
-            elif volonte == "4":
-                print("Vous souhaitez faire une Racine Carre")
-                a = int(input("Saisir le nombre : "))
-                resultat = racine_carre.calcule(a)
-                print(resultat)
-                self.enregistrer(f'racine carree de {a} = {resultat}')
-            elif volonte == "-1":
-                on_off = False
-                self.eteindre()
 
+            action = self.dictionnaire.get(volonte)
+            if action is not None:
+                result = action(self.memoire)
+                if result is not None:
+                    print(result)
 
 
 # MAIN
